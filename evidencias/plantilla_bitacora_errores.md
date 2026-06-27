@@ -2,7 +2,7 @@
 
 ## Datos del estudiante
 Nombre: Santiago Villada
-Grupo: No especificado
+Grupo:
 Fecha: 2026-06-27
 Entorno utilizado: Visual Studio Code
 Sistema operativo: Windows
