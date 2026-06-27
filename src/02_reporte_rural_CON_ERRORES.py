@@ -52,7 +52,6 @@ def convertir_a_numero(valor):
     except (ValueError, TypeError):
         return None
 
-
 # ==========================================================
 # BLOQUE 4: VALIDACION DE FECHAS
 # Error intencional 4: el formato de fecha usado no coincide con el CSV.
@@ -76,21 +75,30 @@ def limpiar_registros(registros):
     invalidos = []
 
     for registro in registros:
-        cantidad = convertir_a_numero(registro["cantidad"])
-        precio = convertir_a_numero(registro["precio_unitario"])
+        # Usar .get para evitar KeyError y convertir valores a números
+        cantidad = convertir_a_numero(registro.get("cantidad"))
+        precio = convertir_a_numero(registro.get("precio_unitario"))
 
-        if cantidad is None or precio is None:
+        # Reglas de validación: cantidad y precio deben ser números no nulos y no negativos
+        if cantidad is None or cantidad < 0:
             invalidos.append(registro)
-        elif cantidad < 0:
+            continue
+        if precio is None or precio < 0:
             invalidos.append(registro)
-        elif not fecha_valida(registro["fecha"]):
+            continue
+        # Validar fecha
+        if not fecha_valida(registro.get("fecha", "")):
             invalidos.append(registro)
-        elif registro["finca"] == "":
+            continue
+        # Validar finca
+        if not registro.get("finca"):
             invalidos.append(registro)
-        else:
-            registro["cantidad"] = cantidad
-            registro["precio_unitario"] = precio
-            validos.append(registro)
+            continue
+
+        # Normalizar tipos y añadir a validos
+        registro["cantidad"] = cantidad
+        registro["precio_unitario"] = precio
+        validos.append(registro)
 
     return validos, invalidos
 
@@ -111,6 +119,7 @@ def analizar_por_producto(registros_validos):
         if producto not in resumen:
             resumen[producto] = {"cantidad_total": 0, "ingreso_total": 0, "registros": 0}
 
+        # Acumular cantidad en lugar de sobrescribir
         resumen[producto]["cantidad_total"] += cantidad
         resumen[producto]["ingreso_total"] += cantidad * precio
         resumen[producto]["registros"] += 1
@@ -132,6 +141,7 @@ def calcular_finca_mayor_ingreso(registros_validos):
         ingresos[finca] = ingresos.get(finca, 0) + ingreso
 
     finca_mayor = max(ingresos, key=ingresos.get)
+    # Corregido el nombre de variable en el return
     return finca_mayor, ingresos[finca_mayor]
 
 
@@ -154,6 +164,7 @@ def generar_reporte(resumen, invalidos, finca_mayor, ingreso_mayor):
     lineas.append(f"Finca con mayor ingreso estimado: {finca_mayor} (${ingreso_mayor:.2f})")
     lineas.append(f"Registros invalidos detectados: {len(invalidos)}")
 
+    # Asegurar que la carpeta de salida exista
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
     with OUTPUT_FILE.open("w", encoding="utf-8") as archivo:
         archivo.write("\n".join(lineas))
@@ -169,6 +180,7 @@ def main():
     print("Generando reporte rural...")
     registros = leer_csv(DATA_FILE)
     validos, invalidos = limpiar_registros(registros)
+    # Corregido: llamar a la función definida `analizar_por_producto`
     resumen = analizar_por_producto(validos)
     finca_mayor, ingreso_mayor = calcular_finca_mayor_ingreso(validos)
     ruta_reporte = generar_reporte(resumen, invalidos, finca_mayor, ingreso_mayor)

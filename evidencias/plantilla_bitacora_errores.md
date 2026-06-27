@@ -1,9 +1,8 @@
 # Bitacora tecnica de errores
 
 ## Datos del estudiante
-
 Nombre: Santiago Villada
-Grupo: 
+Grupo: No especificado
 Fecha: 2026-06-27
 Entorno utilizado: Visual Studio Code
 Sistema operativo: Windows
@@ -26,8 +25,7 @@ Sistema operativo: Windows
 ## Reflexion tecnica
 
 1. ¿Cual fue el error mas dificil de corregir?
-
-Comprendí que el error más difícil fue el de la acumulación incorrecta en la función analizar_por_producto. El programa ejecutaba sin errores de Python, pero la lógica era incorrecta: asignaba en lugar de acumular, por lo que solo guardaba el último valor. Esto causó que no hubiera registros de finca en el análisis, lo que llevó al error "max() iterable argument is empty". Requirió razonamiento lógico además de conocer la sintaxis.
+Comprendí que el error más difícil fue el de la acumulación incorrecta en la función `analizar_por_producto`. El programa ejecutaba sin errores de Python, pero la lógica era incorrecta: asignaba en lugar de acumular, por lo que solo guardaba el último valor. Esto causó que no hubiera registros de finca en el análisis, lo que llevó al error "max() iterable argument is empty". Requirió razonamiento lógico además de conocer la sintaxis.
 
 2. ¿Que aprendiste sobre lectura de errores en la terminal?
 
