@@ -6,13 +6,13 @@ Artefacto del entorno: reporte rural automatico.
 
 ## 2. Problema contextual
 
-Describe brevemente el problema que resuelve el proyecto.
+El proyecto depura un script que procesa registros de producción rural en CSV y genera un reporte automático con ingresos, cantidades y la finca con mayor ingreso.
 
 ## 3. Entorno utilizado
 
-- IDE o editor:
-- Version de Python:
-- Sistema operativo:
+- IDE o editor: Visual Studio Code
+- Version de Python: 3.14.6
+- Sistema operativo: Windows
 
 ## 4. Comandos ejecutados
 
@@ -25,16 +25,16 @@ python src/03_pruebas_reporte.py
 
 ## 5. Resultado obtenido
 
-Describe que archivo se genero y que informacion contiene.
+Se generó el archivo `output/reporte_rural.txt` con un informe de productos, ingresos totales, cantidad de registros válidos, y la finca con mayor ingreso.
 
 ## 6. Errores corregidos
 
-Resume los principales errores corregidos.
+Se corrigieron errores en la ruta del CSV, variables retornadas incorrectas, nombres de columna, validación numérica y de fechas, conversión de precios, nombre de función y carpeta de salida.
 
 ## 7. Comparacion tecnica del entorno
 
-Incluye aqui la matriz de comparacion de funcionalidad, compatibilidad y costo.
+La matriz técnica en `docs/matriz_comparacion_entorno.md` muestra que el entorno es funcional, compatible y de bajo costo.
 
 ## 8. Conclusion
 
-Explica si recomendarias este entorno para proyectos de analisis de datos rurales y por que.
+Recomiendo este entorno para proyectos de análisis de datos rurales porque facilita depurar el código, ejecutar scripts y generar informes con datos reales.
