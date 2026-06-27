@@ -25,8 +25,8 @@ from datetime import datetime
 # Error intencional 1: revisa si el nombre del archivo CSV es correcto.
 # ==========================================================
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_FILE = BASE_DIR / "data" / "produccion.csv"
-OUTPUT_FILE = BASE_DIR / "outputs" / "reporte_rural.txt"
+DATA_FILE = BASE_DIR / "data" / "produccion_rural.csv"
+OUTPUT_FILE = BASE_DIR / "output" / "reporte_rural.txt"
 
 
 # ==========================================================
@@ -38,7 +38,7 @@ def leer_csv(ruta_archivo):
     with ruta_archivo.open("r", encoding="utf-8", newline="") as archivo:
         lector = csv.DictReader(archivo)
         filas = list(lector)
-    return registros
+    return filas
 
 
 # ==========================================================
@@ -47,7 +47,10 @@ def leer_csv(ruta_archivo):
 # ==========================================================
 def convertir_a_numero(valor):
     """Convierte un valor a numero decimal."""
-    return float(valor)
+    try:
+        return float(valor)
+    except (ValueError, TypeError):
+        return None
 
 
 # ==========================================================
@@ -57,7 +60,7 @@ def convertir_a_numero(valor):
 def fecha_valida(texto_fecha):
     """Retorna True si la fecha es valida y False si no lo es."""
     try:
-        datetime.strptime(texto_fecha, "%d/%m/%Y")
+        datetime.strptime(texto_fecha, "%Y-%m-%d")
         return True
     except ValueError:
         return False
@@ -73,11 +76,13 @@ def limpiar_registros(registros):
     invalidos = []
 
     for registro in registros:
-        cantidad = convertir_a_numero(registro["cantida"])
+        cantidad = convertir_a_numero(registro["cantidad"])
         precio = convertir_a_numero(registro["precio_unitario"])
 
-        if cantidad < 0:
-            validos.append(registro)
+        if cantidad is None or precio is None:
+            invalidos.append(registro)
+        elif cantidad < 0:
+            invalidos.append(registro)
         elif not fecha_valida(registro["fecha"]):
             invalidos.append(registro)
         elif registro["finca"] == "":
@@ -106,7 +111,7 @@ def analizar_por_producto(registros_validos):
         if producto not in resumen:
             resumen[producto] = {"cantidad_total": 0, "ingreso_total": 0, "registros": 0}
 
-        resumen[producto]["cantidad_total"] = cantidad
+        resumen[producto]["cantidad_total"] += cantidad
         resumen[producto]["ingreso_total"] += cantidad * precio
         resumen[producto]["registros"] += 1
 
@@ -127,7 +132,7 @@ def calcular_finca_mayor_ingreso(registros_validos):
         ingresos[finca] = ingresos.get(finca, 0) + ingreso
 
     finca_mayor = max(ingresos, key=ingresos.get)
-    return finca_mas_alta, ingresos[finca_mayor]
+    return finca_mayor, ingresos[finca_mayor]
 
 
 # ==========================================================
@@ -149,6 +154,7 @@ def generar_reporte(resumen, invalidos, finca_mayor, ingreso_mayor):
     lineas.append(f"Finca con mayor ingreso estimado: {finca_mayor} (${ingreso_mayor:.2f})")
     lineas.append(f"Registros invalidos detectados: {len(invalidos)}")
 
+    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
     with OUTPUT_FILE.open("w", encoding="utf-8") as archivo:
         archivo.write("\n".join(lineas))
 
@@ -163,7 +169,7 @@ def main():
     print("Generando reporte rural...")
     registros = leer_csv(DATA_FILE)
     validos, invalidos = limpiar_registros(registros)
-    resumen = analizar_productos(validos)
+    resumen = analizar_por_producto(validos)
     finca_mayor, ingreso_mayor = calcular_finca_mayor_ingreso(validos)
     ruta_reporte = generar_reporte(resumen, invalidos, finca_mayor, ingreso_mayor)
 
