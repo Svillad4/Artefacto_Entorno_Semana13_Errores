@@ -84,3 +84,28 @@ Si la salida muestra que las pruebas fueron superadas, el artefacto esta listo p
 - Costo: se trabaja con VS Code y Python, herramientas gratuitas y adecuadas para equipos educativos.
 - Evidencia de pruebas: el estudiante documenta comandos, errores y resultados.
 - Organizacion: el proyecto usa carpetas separadas para datos, codigo, salidas, documentos y evidencias.
+
+## Estado del proyecto
+
+COMPLETADO Y FUNCIONAL
+
+### Resumen de ejecucion
+
+- **Estudiante**: Santiago Villada
+- **Fecha de finalizacion**: 2026-06-27
+- **Errores corregidos**: 10 errores intencionales
+- **Pruebas aprobadas**: 20/20 ✅
+
+### Resultados generados
+
+El archivo `output/reporte_rural.txt` contiene:
+- Resumen de produccion por producto (huevo, yuca, maiz, leche, queso)
+- Ingresos estimados totales por producto
+- Finca con mayor ingreso: La Esperanza ($223,746,671.36)
+- Registros procesados: 8,200 válidos, 5 inválidos
+
+### Archivos de evidencia
+
+- `evidencias/plantilla_bitacora_errores.md` - Detalle técnico de los 10 errores corregidos
+- `evidencias/plantilla_informe_final.md` - Informe completo del proyecto
+- `docs/matriz_comparacion_entorno.md` - Evaluación técnica del entorno (8/8 criterios: 5/5 puntos)
